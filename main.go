@@ -28,25 +28,41 @@ func main() {
 
 	log.Println("words.txt read")
 
-	log.Println(GeneratePassword(lines, 32))
+	words := make(map[int][]string)
+
+	for _, word := range lines {
+		words[len(word)] = append(words[len(word)], word)
+	}
+
+	log.Println(GeneratePassword(words, 32))
 }
 
-func GeneratePassword(lines []string, length int) string {
-	wordone := GetRandomWord(lines)
-	wordtwo := GetRandomWord(lines)
-	for len(wordtwo) != length-len(wordone)-2 {
-		wordtwo = GetRandomWord(lines)
-	}
+func GeneratePassword(words map[int][]string, length int) string {
+	wordone := GetRandomWord(words)
+	wordtwo := GetRandomWordWithLength(words, length-len(wordone)-2)
 	finalpassword := wordone + GetRandomDigit() + GetRandomSymbol() + wordtwo
 	return finalpassword
 }
 
-func GetRandomWord(input []string) string {
-	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(input))))
+func GetRandomWord(words map[int][]string) string {
+	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(words))))
 	if err != nil {
 		log.Fatal(err)
 	}
-	return input[int(i.Int64())]
+	wordArray := words[int(i.Int64())]
+	i, err = rand.Int(rand.Reader, big.NewInt(int64(len(wordArray))))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return wordArray[int(i.Int64())]
+}
+func GetRandomWordWithLength(words map[int][]string, length int) string {
+	wordArray := words[length]
+	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(wordArray))))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return wordArray[int(i.Int64())]
 }
 
 func GetRandomDigit() string {
