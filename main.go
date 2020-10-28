@@ -47,11 +47,12 @@ func main() {
 		}
 	}
 
-	log.Println("words.txt read")
+	log.Println("words.txt read and parsed")
 
 	fileServer := http.FileServer(FileSystem{http.Dir("./static/")})
 	http.HandleFunc("/api/v1/haddock", handleGeneratePassword)
 	http.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), fileServer))
+	log.Println("starting webserver on port 8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
