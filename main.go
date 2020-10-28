@@ -2,8 +2,9 @@ package main
 
 import (
 	"bufio"
+	"crypto/rand"
 	"log"
-	"math/rand"
+	"math/big"
 	"os"
 	"strconv"
 )
@@ -41,11 +42,19 @@ func GeneratePassword(lines []string, length int) string {
 }
 
 func GetRandomWord(input []string) string {
-	return input[rand.Intn(len(input))]
+	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(input))))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return input[int(i.Int64())]
 }
 
 func GetRandomDigit() string {
-	return strconv.Itoa(rand.Int() % 10)
+	i, err := rand.Int(rand.Reader, big.NewInt(10))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return strconv.Itoa(int(i.Int64()) % 10)
 }
 
 func GetRandomSymbol() string {
@@ -53,6 +62,9 @@ func GetRandomSymbol() string {
 	// problems in scripts have been removed. the original list is as follows:
 	// `~!@#$%^&*()-_=+[{]}\|;:'",<.>/?
 	symbols := []rune("!%^&*()-_=+[{]}|;:,<.>/?")
-	return string(symbols[rand.Intn(len(symbols))])
-
+	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(symbols))))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(symbols[int(i.Int64())])
 }
