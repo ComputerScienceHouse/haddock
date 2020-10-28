@@ -9,7 +9,13 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
+
+// FileSystem custom file system handler
+type FileSystem struct {
+	fs http.FileSystem
+}
 
 var words map[int][]string
 var longestWord int
@@ -43,7 +49,9 @@ func main() {
 
 	log.Println("words.txt read")
 
+	fileServer := http.FileServer(FileSystem{http.Dir("./static/")})
 	http.HandleFunc("/api/v1/haddock", handleGeneratePassword)
+	http.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), fileServer))
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
@@ -153,4 +161,21 @@ func GetRandomNumber() int {
 		log.Fatal(err)
 	}
 	return int(i.Int64()) + 1
+}
+
+func (fs FileSystem) Open(path string) (http.File, error) {
+	f, err := fs.fs.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := f.Stat()
+	if s.IsDir() {
+		index := strings.TrimSuffix(path, "/") + "/index.html"
+		if _, err := fs.fs.Open(index); err != nil {
+			return nil, err
+		}
+	}
+
+	return f, nil
 }
