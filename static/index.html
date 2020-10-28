@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>CSH: Haddock</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+    <style type="text/css">
+        html {
+            text-align: center;
+            font-family: sans-serif;
+            color: #111;
+            background-color: #def;
+        }
+
+        a,
+        a:hover,
+        a:active,
+        a:visited {
+            color: #48a;
+        }
+
+        h1 {
+            color: #7ac;
+            margin: 20px 0 0 0;
+        }
+
+        #subhead {
+            color: #aac;
+            font-size: 80%;
+            margin: 0 0 20px 0;
+        }
+
+        #explain {
+            color: #aac;
+            font-size: 70%;
+            margin: 2px 0 0 0;
+        }
+
+        #passwords {
+            padding: 0;
+            margin-top: 20px;
+            font-family: monospace;
+            list-style-type: none;
+        }
+
+        #passwords li {
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CSH: Haddock</h1>
+    <p id="subhead">Memorable passwords from <a
+            href="http://www.stephencelis.com/2009/03/29/whats-the-password-haddock.html">Haddock</a> + <a
+            href="http://www.wyrdplay.org/12dicts.html">12dicts</a>
+        <br>Site code by <a href="http://grantovich.net/">Grantovich</a> and <a href="https://galenguyer.com">Galen
+            Guyer</a>
+        <br>Ported to CSH by <a href="https://github.com/galenguyer">Galen Guyer</a> &ndash; Source on <a
+            href="https://github.com/galenguyer/haddock">GitHub</a></p>
+    <label for="input_length">Length:</label>
+    <input name="length" id="input_length" type="number" size="2" min="16" max="48" maxlength="2" value="24" />
+    <button id="genbutton" onclick="onLengthSubmit()" value="Generate">Generate</button>
+    <p id="explain">Default 24, minimum 16, maximum 48</p>
+    <ul id="passwords">
+
+    </ul>
+    <script>
+        function onLengthSubmit() {
+            length = document.getElementById("input_length").value;
+            fetch('/api/v1/haddock?length=' + length)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("passwords").innerHTML = "";
+                    data.forEach(p => {
+                        var node = document.createElement('li');
+                        node.innerText = p
+                        document.getElementById("passwords").appendChild(node);
+                    })
+                });
+        }
+        onLengthSubmit();
+        document.getElementById("input_length").addEventListener("keydown", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                document.getElementById("genbutton").click();
+            }
+        });
+    </script>
+</body>
+
+</html>
