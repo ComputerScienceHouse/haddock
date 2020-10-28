@@ -68,6 +68,7 @@
     <script>
         function onLengthSubmit() {
             length = document.getElementById("input_length").value;
+            location.hash = "#length="+length
             fetch('/api/v1/haddock?length=' + length)
                 .then(response => response.json())
                 .then(data => {
@@ -78,6 +79,13 @@
                         document.getElementById("passwords").appendChild(node);
                     })
                 });
+        }
+        const urlParams = new URLSearchParams(location.hash.substring(1));
+        if (urlParams.has('length')) {
+            const length = parseInt(urlParams.get("length"))
+            if (length >= 16 && length <= 48) {
+                document.getElementById("input_length").value = length
+            }
         }
         onLengthSubmit();
         document.getElementById("input_length").addEventListener("keydown", function (event) {
