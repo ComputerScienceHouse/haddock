@@ -3,11 +3,16 @@ package main
 import (
 	"bufio"
 	"crypto/rand"
+	"encoding/json"
 	"log"
 	"math/big"
+	"net/http"
 	"os"
 	"strconv"
 )
+
+var words map[int][]string
+var longestWord int
 
 func main() {
 	file, err := os.Open("./words.txt")
@@ -26,10 +31,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("words.txt read")
-
-	words := make(map[int][]string)
-	longestWord := 0
+	longestWord = 0
+	words = make(map[int][]string)
 
 	for _, word := range lines {
 		words[len(word)] = append(words[len(word)], word)
@@ -38,18 +41,47 @@ func main() {
 		}
 	}
 
-	log.Println(GeneratePassword(words, longestWord, 16))
-	log.Println(GeneratePassword(words, longestWord, 16))
-	log.Println(GeneratePassword(words, longestWord, 16))
-	log.Println(GeneratePassword(words, longestWord, 24))
-	log.Println(GeneratePassword(words, longestWord, 24))
-	log.Println(GeneratePassword(words, longestWord, 48))
-	log.Println(GeneratePassword(words, longestWord, 48))
-	log.Println(GeneratePassword(words, longestWord, 48))
+	log.Println("words.txt read")
+
+	http.HandleFunc("/api/v1/haddock", handleGeneratePassword)
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+
+func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
+	var length int
+	query := r.URL.Query()
+	lenstr, present := query["length"]
+	if !present || len(lenstr) == 0 {
+		length = 24
+	} else {
+		lenth, err := strconv.Atoi(lenstr[0])
+		if err != nil {
+			length = 24
+		}
+		length = lenth
+	}
+
+	if length < 16 {
+		length = 16
+	} else if length > 48 {
+		length = 48
+	}
+
+	data := []string{
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+	}
+	json.NewEncoder(w).Encode(data)
 }
 
 // length MUST be above 16
-func GeneratePassword(words map[int][]string, longestWord int, length int) string {
+func GeneratePassword(length int) string {
 	var min int
 	if length <= 16 {
 		min = 6
