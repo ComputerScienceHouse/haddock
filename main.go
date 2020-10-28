@@ -84,6 +84,8 @@ func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
 		GeneratePassword(length),
 		GeneratePassword(length),
 		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
 	}
 	json.NewEncoder(w).Encode(data)
 }
@@ -136,10 +138,7 @@ func GetRandomDigit() string {
 }
 
 func GetRandomSymbol() string {
-	// this is a somewhat restricted list of characters. some characters that may cause
-	// problems in scripts have been removed. the original list is as follows:
-	// `~!@#$%^&*()-_=+[{]}\|;:'",<.>/?
-	symbols := []rune("!%^&*()-_=+[{]}|;:,<.>/?")
+	symbols := []rune("`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?")
 	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(symbols))))
 	if err != nil {
 		log.Fatal(err)
