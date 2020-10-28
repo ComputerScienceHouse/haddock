@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"log"
+	"math/rand"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -24,4 +26,33 @@ func main() {
 	}
 
 	log.Println("words.txt read")
+
+	log.Println(GeneratePassword(lines, 32))
+}
+
+func GeneratePassword(lines []string, length int) string {
+	wordone := GetRandomWord(lines)
+	wordtwo := GetRandomWord(lines)
+	for len(wordtwo) != length-len(wordone)-2 {
+		wordtwo = GetRandomWord(lines)
+	}
+	finalpassword := wordone + GetRandomDigit() + GetRandomSymbol() + wordtwo
+	return finalpassword
+}
+
+func GetRandomWord(input []string) string {
+	return input[rand.Intn(len(input))]
+}
+
+func GetRandomDigit() string {
+	return strconv.Itoa(rand.Int() % 10)
+}
+
+func GetRandomSymbol() string {
+	// this is a somewhat restricted list of characters. some characters that may cause
+	// problems in scripts have been removed. the original list is as follows:
+	// `~!@#$%^&*()-_=+[{]}\|;:'",<.>/?
+	symbols := []rune("!%^&*()-_=+[{]}|;:,<.>/?")
+	return string(symbols[rand.Intn(len(symbols))])
+
 }
