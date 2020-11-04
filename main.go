@@ -103,7 +103,7 @@ func GeneratePassword(length int) string {
 	} else {
 		min = 14
 	}
-	lenone := GetRandomNumberBetween(min, ((length)/2)-1)
+	lenone := GetRandomNumberBetween(min-1, ((length)/2)-1)
 	lentwo := GetRandomNumberBetween(min, ((length) / 2))
 	wordone := GetRandomWordWithLength(words, lenone)
 	wordtwo := GetRandomWordWithLength(words, lentwo)
