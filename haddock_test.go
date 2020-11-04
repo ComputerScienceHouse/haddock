@@ -10,15 +10,11 @@ import (
 func TestGetRandomNumberBetween(t *testing.T) {
 	min := 0
 	max := 10
-	errorCount := 0
 	for i := 0; i < 100; i++ {
 		result := GetRandomNumberBetween(min, max)
 		if result < min || result > max {
-			errorCount++
+			t.Errorf("random number generation failed, %d not between %d and %d", result, min, max)
 		}
-	}
-	if errorCount > 0 {
-		t.Errorf("random number generation failed %d times, not between %d and %d", errorCount, min, max)
 	}
 }
 
