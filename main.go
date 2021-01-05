@@ -51,6 +51,7 @@ func main() {
 
 	fileServer := http.FileServer(FileSystem{http.Dir("./static/")})
 	http.HandleFunc("/api/v1/haddock", handleGeneratePassword)
+	http.HandleFunc("/api/v1/xkcd", handleGenerateXKCDPassword)
 	http.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), fileServer))
 	log.Println("starting webserver on port 8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
@@ -74,6 +75,42 @@ func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
 		length = 16
 	} else if length > 48 {
 		length = 48
+	}
+
+	var data []string
+	data = []string{
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+		GeneratePassword(length),
+	}
+	json.NewEncoder(w).Encode(data)
+}
+
+func handleGenerateXKCDPassword(w http.ResponseWriter, r *http.Request) {
+	var length int
+	query := r.URL.Query()
+	lenstr, present := query["length"]
+	if !present || len(lenstr) == 0 {
+		length = 24
+	} else {
+		lenth, err := strconv.Atoi(lenstr[0])
+		if err != nil {
+			length = 24
+		}
+		length = lenth
+	}
+
+	if length < 16 {
+		length = 16
+	} else if length > 64 {
+		length = 64
 	}
 
 	var data []string

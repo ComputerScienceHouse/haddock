@@ -61,15 +61,20 @@
     <label for="input_length">Length:</label>
     <input name="length" id="input_length" type="number" size="2" min="16" max="48" maxlength="2" value="32" />
     <button id="genbutton" onclick="onLengthSubmit()" value="Generate">Generate</button>
+    <br>
+    <label for="input_xkcd">XKCD Style: </label>
+    <input name="xkcd" id="input_xkcd" type="checkbox" />
     <p id="explain">Default 32, minimum 16, maximum 48</p>
     <ul id="passwords">
 
     </ul>
     <script>
         function onLengthSubmit() {
-            length = document.getElementById("input_length").value;
+            const length = document.getElementById("input_length").value;
+            const xkcd = document.getElementById("input_xkcd").checked;
             location.hash = "#length="+length
-            fetch('/api/v1/haddock?length=' + length)
+            const url = xkcd ? '/api/v1/xkcd?length=' : '/api/v1/haddock?length=' 
+            fetch(url + length)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("passwords").innerHTML = "";
