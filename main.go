@@ -76,17 +76,18 @@ func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
 		length = 48
 	}
 
-	data := []string{
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
+	var data []string
+	data = []string{
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
+		GenerateXKCDPassword(length),
 	}
 	json.NewEncoder(w).Encode(data)
 }
@@ -113,6 +114,14 @@ func GeneratePassword(length int) string {
 	}
 	finalpassword = finalpassword + GetRandomSymbol() + wordtwo
 	return finalpassword
+}
+
+func GenerateXKCDPassword(length int) string {
+	minLen := (length-6)/4 - 2
+	maxLen := (length-6)/4 + 2
+	lengths := []int{GetRandomNumberBetween(minLen, maxLen), GetRandomNumberBetween(minLen, maxLen), GetRandomNumberBetween(minLen, maxLen)}
+	lengths = append(lengths, length-3-(lengths[0]+lengths[1]+lengths[2]))
+	return GetRandomWordWithLength(words, lengths[0]) + "-" + GetRandomWordWithLength(words, lengths[1]) + "-" + GetRandomWordWithLength(words, lengths[2]) + "-" + GetRandomWordWithLength(words, lengths[3])
 }
 
 func GetRandomWordWithLength(words map[int][]string, length int) string {
