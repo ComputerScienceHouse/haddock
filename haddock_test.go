@@ -92,7 +92,7 @@ func TestGeneratePassword(t *testing.T) {
 	//         END SETUP
 	// ----------------------------
 
-	for length := 16; length <= 48; length++ {
+	for length := 16; length <= 64; length++ {
 		password := GeneratePassword(length)
 		if len(password) != length {
 			t.Errorf("expected password of length %d, got length %d", length, len(password))

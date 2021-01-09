@@ -197,7 +197,7 @@ func BenchmarkGeneratePasswordWithLength32(b *testing.B) {
 	}
 }
 
-func BenchmarkGeneratePasswordWithLength48(b *testing.B) {
+func BenchmarkGeneratePasswordWithLength64(b *testing.B) {
 	// ----------------------------
 	//        BEGIN SETUP
 	// ----------------------------
@@ -231,6 +231,6 @@ func BenchmarkGeneratePasswordWithLength48(b *testing.B) {
 	// ----------------------------
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		GeneratePassword(48)
+		GeneratePassword(64)
 	}
 }

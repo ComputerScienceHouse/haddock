@@ -73,8 +73,8 @@ func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
 
 	if length < 16 {
 		length = 16
-	} else if length > 48 {
-		length = 48
+	} else if length > 64 {
+		length = 64
 	}
 
 	var data []string

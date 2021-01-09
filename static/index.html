@@ -59,12 +59,12 @@
         <br>Ported to CSH by <a href="https://github.com/galenguyer">Galen Guyer</a> &ndash; Source on <a
             href="https://github.com/galenguyer/haddock">GitHub</a></p>
     <label for="input_length">Length:</label>
-    <input name="length" id="input_length" type="number" size="2" min="16" max="48" maxlength="2" value="32" />
+    <input name="length" id="input_length" type="number" size="2" min="16" max="64" maxlength="2" value="32" />
     <button id="genbutton" onclick="onLengthSubmit()" value="Generate">Generate</button>
     <br>
     <label for="input_xkcd">XKCD Style: </label>
     <input name="xkcd" id="input_xkcd" type="checkbox" />
-    <p id="explain">Default 32, minimum 16, maximum 48</p>
+    <p id="explain">Default 32, minimum 16, maximum 64</p>
     <ul id="passwords">
 
     </ul>
@@ -88,7 +88,7 @@
         const urlParams = new URLSearchParams(location.hash.substring(1));
         if (urlParams.has('length')) {
             const length = parseInt(urlParams.get("length"))
-            if (length >= 16 && length <= 48) {
+            if (length >= 16 && length <= 64) {
                 document.getElementById("input_length").value = length
             }
         }
