@@ -78,10 +78,19 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("passwords").innerHTML = "";
+                    var passNum = 0;
                     data.forEach(p => {
                         var node = document.createElement('li');
+                        node.setAttribute('id', 'password' + passNum);
                         node.innerText = p
                         document.getElementById("passwords").appendChild(node);
+
+                        var butt = document.createElement('button');
+                        butt.textContent = 'Copy';
+                        butt.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
+                        document.getElementById('passwords').appendChild(butt);
+
+                        passNum++;
                     })
                 });
         }
@@ -102,6 +111,32 @@
                 document.getElementById("genbutton").click();
             }
         });
+        function clipboardize(passwordID) {
+          /* Get the text field */
+            var element = document.getElementById(passwordID);
+            var range, selection, worked;
+            
+              if (document.body.createTextRange) {
+                range = document.body.createTextRange();
+                range.moveToElementText(element);
+                range.select();
+              } else if (window.getSelection) {
+                selection = window.getSelection();        
+                range = document.createRange();
+                range.selectNodeContents(element);
+                selection.removeAllRanges();
+                selection.addRange(range);
+              }
+              
+              try {
+                document.execCommand('copy');
+                alert('text copied');
+              }
+              catch (err) {
+                alert('unable to copy text');
+              }
+
+        }
     </script>
 </body>
 
