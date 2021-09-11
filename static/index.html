@@ -30,7 +30,7 @@
             margin: 0 0 20px 0;
         }
 
-        #explain {
+        .explain {
             color: #aac;
             font-size: 70%;
             margin: 2px 0 0 0;
@@ -41,17 +41,17 @@
             margin-top: 18px;
             font-family: monospace;
             list-style-type: none;
-            
             display: flex;
             justify-content: center;
             flex-direction: column;
         }
 
         #passwords li {
-            margin-top: 20px;
+            margin-top: 12px;
             display: flex;
-            justify-content:center;
-            column-gap: 2px;
+            justify-content: center;
+            align-items: center;
+            column-gap: 8px;
             border-radius: 10px;
             padding-left: 12px;
             padding-right: 12px;
@@ -75,7 +75,10 @@
     <br>
     <label for="input_xkcd">XKCD Style: </label>
     <input name="xkcd" id="input_xkcd" type="checkbox" />
-    <p id="explain">Default 32, minimum 16, maximum 48</p>
+    <div class="explain">
+    <p>Default 32, minimum 16, maximum 48</p>
+    <p>Click or tap to copy to clipboard. <img src="clipboard.svg" onclick="clipboardize(&quot;password0&quot;)" width="12" height="12"></p>
+    </div>
     <ul id="passwords">
 
     </ul>
@@ -93,24 +96,22 @@
                     data.forEach(p => {
                         // Create a "node" to attach the password and clipboard to.
                         var node = document.createElement('li');
-//                        node.setAttribute('style', 'display: flex;  flex-direction: row;');
                         
                         // Create the password item
                         var passwordText = document.createElement('p');
                         passwordText.setAttribute('id', 'password' + passNum);
                         passwordText.innerText = p
-//                        document.getElementById("passwords").appendChild(node);
+                        passwordText.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
 
-                        var butt = document.createElement('img');
-                        butt.setAttribute('src', 'https://csh.rit.edu/~wilnil/clipboard2.svg');
-                        butt.setAttribute('height', '24');
-                        butt.setAttribute('width', '24');
-                        butt.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
-//                        document.getElementById('passwords').appendChild(butt);
+                        /*var butt = document.createElement('img');
+                        butt.setAttribute('src', 'clipboard.svg');
+                        butt.setAttribute('height', '12');
+                        butt.setAttribute('width', '12');
+                        butt.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');*/
 
                         // Build the contents of the "node"
                         node.appendChild(passwordText);
-                        node.appendChild(butt);
+                        // node.appendChild(butt);
                         
                         // Append the newly constructed "node" to the password list
                         document.getElementById("passwords").appendChild(node);
