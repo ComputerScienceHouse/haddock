@@ -38,14 +38,25 @@
 
         #passwords {
             padding: 0;
-            margin-top: 20px;
+            margin-top: 18px;
             font-family: monospace;
             list-style-type: none;
+            
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
         }
 
         #passwords li {
-            margin-top: 12px;
+            margin-top: 20px;
+            display: flex;
+            justify-content:center;
+            column-gap: 2px;
+            border-radius: 10px;
+            padding-left: 12px;
+            padding-right: 12px;
         }
+
     </style>
 </head>
 
@@ -80,15 +91,29 @@
                     document.getElementById("passwords").innerHTML = "";
                     var passNum = 0;
                     data.forEach(p => {
+                        // Create a "node" to attach the password and clipboard to.
                         var node = document.createElement('li');
-                        node.setAttribute('id', 'password' + passNum);
-                        node.innerText = p
-                        document.getElementById("passwords").appendChild(node);
+//                        node.setAttribute('style', 'display: flex;  flex-direction: row;');
+                        
+                        // Create the password item
+                        var passwordText = document.createElement('p');
+                        passwordText.setAttribute('id', 'password' + passNum);
+                        passwordText.innerText = p
+//                        document.getElementById("passwords").appendChild(node);
 
-                        var butt = document.createElement('button');
-                        butt.textContent = 'Copy';
+                        var butt = document.createElement('img');
+                        butt.setAttribute('src', 'https://csh.rit.edu/~wilnil/clipboard2.svg');
+                        butt.setAttribute('height', '24');
+                        butt.setAttribute('width', '24');
                         butt.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
-                        document.getElementById('passwords').appendChild(butt);
+//                        document.getElementById('passwords').appendChild(butt);
+
+                        // Build the contents of the "node"
+                        node.appendChild(passwordText);
+                        node.appendChild(butt);
+                        
+                        // Append the newly constructed "node" to the password list
+                        document.getElementById("passwords").appendChild(node);
 
                         passNum++;
                     })
@@ -130,10 +155,10 @@
               
               try {
                 document.execCommand('copy');
-                alert('text copied');
+                console.log('text copied');
               }
               catch (err) {
-                alert('unable to copy text');
+                console.log('unable to copy text');
               }
 
         }
