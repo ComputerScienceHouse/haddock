@@ -1,0 +1,46 @@
+        html {
+            text-align: center;
+            font-family: sans-serif;
+            color: #111;
+            background-color: #def;
+        }
+
+        a,
+        a:hover,
+        a:active,
+        a:visited {
+            color: #48a;
+        }
+
+        h1 {
+            color: #7ac;
+            margin: 20px 0 0 0;
+        }
+
+        #subhead {
+            color: #aac;
+            font-size: 80%;
+            margin: 0 0 20px 0;
+        }
+
+        .explain {
+            color: #aac;
+            font-size: 70%;
+            margin: 2px 0 0 0;
+        }
+
+        #passwords {
+            padding: 0;
+            margin-top: 18px;
+            font-family: monospace;
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #passwords li {
+            margin-top: 16px;
+        }
+
+
