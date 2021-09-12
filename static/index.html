@@ -47,14 +47,7 @@
         }
 
         #passwords li {
-            margin-top: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            column-gap: 8px;
-            border-radius: 10px;
-            padding-left: 12px;
-            padding-right: 12px;
+            margin-top: 16px;
         }
 
     </style>
@@ -94,27 +87,14 @@
                     document.getElementById("passwords").innerHTML = "";
                     var passNum = 0;
                     data.forEach(p => {
-                        // Create a "node" to attach the password and clipboard to.
-                        var node = document.createElement('li');
-                        
                         // Create the password item
-                        var passwordText = document.createElement('p');
+                        var passwordText = document.createElement('li');
                         passwordText.setAttribute('id', 'password' + passNum);
                         passwordText.innerText = p
                         passwordText.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
 
-                        /*var butt = document.createElement('img');
-                        butt.setAttribute('src', 'clipboard.svg');
-                        butt.setAttribute('height', '12');
-                        butt.setAttribute('width', '12');
-                        butt.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');*/
-
-                        // Build the contents of the "node"
-                        node.appendChild(passwordText);
-                        // node.appendChild(butt);
-                        
                         // Append the newly constructed "node" to the password list
-                        document.getElementById("passwords").appendChild(node);
+                        document.getElementById("passwords").appendChild(passwordText);
 
                         passNum++;
                     })
