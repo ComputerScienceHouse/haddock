@@ -4,49 +4,8 @@
 <head>
     <title>CSH: Haddock</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
-    <style type="text/css">
-        html {
-            text-align: center;
-            font-family: sans-serif;
-            color: #111;
-            background-color: #def;
-        }
-
-        a,
-        a:hover,
-        a:active,
-        a:visited {
-            color: #48a;
-        }
-
-        h1 {
-            color: #7ac;
-            margin: 20px 0 0 0;
-        }
-
-        #subhead {
-            color: #aac;
-            font-size: 80%;
-            margin: 0 0 20px 0;
-        }
-
-        #explain {
-            color: #aac;
-            font-size: 70%;
-            margin: 2px 0 0 0;
-        }
-
-        #passwords {
-            padding: 0;
-            margin-top: 20px;
-            font-family: monospace;
-            list-style-type: none;
-        }
-
-        #passwords li {
-            margin-top: 12px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="scripts.js"></script>
 </head>
 
 <body>
@@ -64,44 +23,15 @@
     <br>
     <label for="input_xkcd">XKCD Style: </label>
     <input name="xkcd" id="input_xkcd" type="checkbox" />
-    <p id="explain">Default 32, minimum 16, maximum 48</p>
+    <div class="explain">
+    <p>Default 32, minimum 16, maximum 48</p>
+    <p>Click or tap to copy to clipboard. <img src="clipboard.svg" onclick="clipboardize(&quot;password0&quot;)" width="12" height="12"></p>
+    </div>
     <ul id="passwords">
 
     </ul>
     <script>
-        function onLengthSubmit() {
-            const length = document.getElementById("input_length").value;
-            const xkcd = document.getElementById("input_xkcd").checked;
-            location.hash = "#length="+length
-            const url = xkcd ? '/api/v1/xkcd?length=' : '/api/v1/haddock?length=' 
-            fetch(url + length)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("passwords").innerHTML = "";
-                    data.forEach(p => {
-                        var node = document.createElement('li');
-                        node.innerText = p
-                        document.getElementById("passwords").appendChild(node);
-                    })
-                });
-        }
-        const urlParams = new URLSearchParams(location.hash.substring(1));
-        if (urlParams.has('length')) {
-            const length = parseInt(urlParams.get("length"))
-            if (length >= 16 && length <= 48) {
-                document.getElementById("input_length").value = length
-            }
-        }
-        onLengthSubmit();
-        document.getElementById("input_length").addEventListener("keydown", function (event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                // Cancel the default action, if needed
-                event.preventDefault();
-                // Trigger the button element with a click
-                document.getElementById("genbutton").click();
-            }
-        });
+        main();
     </script>
 </body>
 
