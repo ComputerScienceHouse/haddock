@@ -5,7 +5,9 @@
     <title>CSH: Haddock</title>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css"/>
-    <script src="scripts.js"></script>
+    <script type="module" src="toggle-selection.js"></script>
+    <script type="module" src="copy-to-clipboard.js"></script>
+    <script type="module" src="scripts.js"></script>
 </head>
 
 <body>
@@ -25,13 +27,25 @@
     <input name="xkcd" id="input_xkcd" type="checkbox" />
     <div class="explain">
     <p>Default 32, minimum 16, maximum 48</p>
-    <p>Click or tap to copy to clipboard. <img src="clipboard.svg" onclick="clipboardize(&quot;password0&quot;)" width="12" height="12"></p>
+    <p>Click or tap to copy to clipboard. <img src="clipboard.svg" width="12" height="12"></p>
     </div>
+    <!--Clipboardize is used here-->
     <ul id="passwords">
 
     </ul>
-    <script>
+    <script type="module">
+        import { main, clipboardize } from "./scripts.js";
         main();
+        /*
+        window.onload = () => {
+            document.querySelectorAll('.passwordItem').forEach( p => {
+                p.addEventListener('click', listener, () => {
+                    console.log('Are you actually listening to me, you fuck?');
+                   clipboardize(p.getAttribute('id'));
+                });
+                console.log(p + " is for piss");
+            } );
+        }*/
     </script>
 </body>
 
