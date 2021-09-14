@@ -1,3 +1,5 @@
+ import { copy } from './copy-to-clipboard.js';
+
 function main() {
     const urlParams = new URLSearchParams(location.hash.substring(1));
     if (urlParams.has('length')) {
@@ -38,38 +40,44 @@ function clipboardize(passwordID) {
           }
 
           try {
-            document.execCommand('copy');
+            //document.execCommand('copy');
+            copy(selection.toString());
             console.log('text copied');
           }
           catch (err) {
             console.log('unable to copy text');
-          }
 
+            console.log(err);
+          }
 }
 
 function onLengthSubmit() {
-        const length = document.getElementById("input_length").value;
-        const xkcd = document.getElementById("input_xkcd").checked;
-        location.hash = "#length="+length
-        const url = xkcd ? '/api/v1/xkcd?length=' : '/api/v1/haddock?length='
-        fetch(url + length)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("passwords").innerHTML = "";
-                var passNum = 0;
-                data.forEach(p => {
-                    // Create the password item
-                    var passwordText = document.createElement('li');
-                    passwordText.setAttribute('id', 'password' + passNum);
-                    passwordText.innerText = p
-                    passwordText.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
+    const length = document.getElementById("input_length").value;
+    const xkcd = document.getElementById("input_xkcd").checked;
+    location.hash = "#length="+length
+    const url = xkcd ? '/api/v1/xkcd?length=' : '/api/v1/haddock?length='
+    fetch(url + length)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("passwords").innerHTML = "";
+            var passNum = 0;
+            data.forEach(p => {
+                // Create the password item
+                var passwordText = document.createElement('li');
+                passwordText.setAttribute('id', 'password' + passNum);
+                passwordText.setAttribute('class', 'passwordItem');
+                passwordText.innerText = p;
+                passwordText.setAttribute('onclick', 'clipboardize(\"password' + passNum + '\")');
 
-                    // Append the newly constructed "node" to the password list
-                    document.getElementById("passwords").appendChild(passwordText);
+                // Append the newly constructed "node" to the password list
+                document.getElementById("passwords").appendChild(passwordText);
 
-                    passNum++;
-                })
-            });
-    }
+                passNum++;
+            })
+        });
+}
 
+export { main, clipboardize }
 
+window.clipboardize = clipboardize; // Fuck literally everything about computers.
+window.onLengthSubmit = onLengthSubmit;
