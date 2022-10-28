@@ -1,4 +1,4 @@
-FROM golang:1.19.2-alpine3.12 as build
+FROM golang:1.19.2-alpine3.16 as build
 LABEL maintainer="Galen Guyer <galen@galenguyer.com>"
 WORKDIR /app
 COPY main.go .
