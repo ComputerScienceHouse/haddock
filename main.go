@@ -20,10 +20,12 @@ type FileSystem struct {
 var words map[int][]string
 var longestWord int
 
+const wordsFile = "./words.txt"
+
 func main() {
-	file, err := os.Open("./words.txt")
+	file, err := os.Open(wordsFile)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Faild to open words file %s: %v", wordsFile, err)
 	}
 	defer file.Close()
 
@@ -34,7 +36,7 @@ func main() {
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to read words file %s: %v", wordsFile, err)
 	}
 
 	longestWord = 0
@@ -47,14 +49,18 @@ func main() {
 		}
 	}
 
-	log.Println("words.txt read and parsed")
+	log.Printf("Successfully parsed words file %s", wordsFile)
 
 	fileServer := http.FileServer(FileSystem{http.Dir("./static/")})
 	http.HandleFunc("/api/v1/haddock", handleGeneratePassword)
 	http.HandleFunc("/api/v1/xkcd", handleGenerateXKCDPassword)
 	http.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), fileServer))
-	log.Println("starting webserver on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+
+	log.Println("Starting webserver on port 8000")
+
+	err = http.ListenAndServe(":8000", nil)
+
+	log.Fatalf("Webserver exited: %v", err)
 }
 
 func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
@@ -171,7 +177,7 @@ func GetRandomWordWithLength(words map[int][]string, length int) string {
 	wordArray := words[safelen]
 	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(wordArray))))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to generate random word with length %d: %v", length, err)
 	}
 	return wordArray[int(i.Int64())]
 }
@@ -179,7 +185,7 @@ func GetRandomWordWithLength(words map[int][]string, length int) string {
 func GetRandomDigit() string {
 	i, err := rand.Int(rand.Reader, big.NewInt(10))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to generate random digit: %v", err)
 	}
 	return strconv.Itoa(int(i.Int64()) % 10)
 }
@@ -188,7 +194,7 @@ func GetRandomSymbol() string {
 	symbols := []rune("`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?")
 	i, err := rand.Int(rand.Reader, big.NewInt(int64(len(symbols))))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to generate random symbol: %v", err)
 	}
 	return string(symbols[int(i.Int64())])
 }
@@ -204,7 +210,7 @@ func GetRandomNumberBetween(min int, max int) int {
 func GetRandomNumber() int {
 	i, err := rand.Int(rand.Reader, big.NewInt(63))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to generate random number: %v", err)
 	}
 	return int(i.Int64()) + 1
 }
