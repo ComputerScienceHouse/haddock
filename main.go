@@ -83,19 +83,14 @@ func handleGeneratePassword(w http.ResponseWriter, r *http.Request) {
 		length = 48
 	}
 
-	var data []string
-	data = []string{
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
-		GeneratePassword(length),
+	passwordCount := 10
+
+	data := make([]string, passwordCount)
+
+	for i := range data {
+		data[i] = GeneratePassword(length)
 	}
+
 	json.NewEncoder(w).Encode(data)
 }
 
@@ -119,19 +114,14 @@ func handleGenerateXKCDPassword(w http.ResponseWriter, r *http.Request) {
 		length = 64
 	}
 
-	var data []string
-	data = []string{
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
-		GenerateXKCDPassword(length),
+	passwordCount := 10
+
+	data := make([]string, passwordCount)
+
+	for i := range data {
+		data[i] = GenerateXKCDPassword(length)
 	}
+
 	json.NewEncoder(w).Encode(data)
 }
 
